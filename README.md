@@ -30,10 +30,13 @@ The project was inspired by the Win64 HelloWorld example provided by [mcandre](h
 
 ## Screenshots
 
-_Coming soon!_  
-(Suggest adding screenshots of the application running in a terminal, showing the welcome message, help menu, and a sample calculation.)
+Here are some screenshots of Calculator ASM in action:
+
+![Main Screen](assets/screenshots/calculator-asm.png)
 
 ## Environment Setup
+
+### Prerequisites
 
 To build and run this project, you will need the following tools and environment:
 
@@ -53,15 +56,21 @@ To build and run this project, you will need the following tools and environment
 2. **Install Required Tools**: It is recommended to install the required tools using [Chocolatey](https://chocolatey.org/install). Run the following command in an elevated PowerShell terminal:
 
    ```bash
-   choco install nasm visualstudio2017buildtools visualstudio2017-workload-vctools
+   choco install nasm visualstudio2022buildtools visualstudio2022-workload-vctools
    ```
 
 3. **Add NASM to PATH**: Ensure the NASM binary folder is added to your `PATH` environment variable. This step is necessary for the `makefile` to locate the assembler.
 
-4. **Ensure Build Environment Setup**: Make sure the `vcvarsall.bat` script is accessible for setting up the build environment. This script is typically located in the Visual Studio Build Tools installation directory:
-   ```
-   C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat
-   ```
+4. **Ensure Build Environment Setup**: The build process automatically detects and configures the required Visual Studio build environment (`vcvarsall.bat`) using the `vswhere.exe` tool. If Visual Studio is installed, no manual configuration is needed.
+
+   If autodetection fails, ensure the following:
+
+   - Visual Studio is installed with the "C++ Build Tools" workload.
+   - The `vswhere.exe` utility is available in its default installation path:
+     ```
+     C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe
+     ```
+   - Alternatively, you can manually specify the `VS_VERSION` (e.g., `VS_VERSION=2017`, `VS_VERSION=2022`) or provide the full path to `vcvarsall.bat` using the `VCVARSALL_PATH` variable in the `make` command.
 
 ## Building the Application
 
@@ -80,9 +89,18 @@ make
    nasm -f win64 calculator.asm -o out\calculator.obj -g
    ```
 2. **Set Up the Build Environment**:
+
    ```bash
-   call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" amd64
+   # Step 1: Use vswhere.exe to locate vcvarsall.bat
+   "C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -find **/vcvarsall.bat
+
+   # Example Output (for Visual Studio 2022):
+   # C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat
+
+   # Step 2: Call vcvarsall.bat with the amd64 argument to set up the environment
+   call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvarsall.bat" amd64
    ```
+
 3. **Link the Executable**:
    ```bash
    link /entry:start /subsystem:console out\calculator.obj kernel32.lib
@@ -109,7 +127,7 @@ make
 
 ### Calculator
 
-The default Windows Calculator has a "Programmer Mode" that can be extremely useful for assembly programming. Use it to perform quick binary, hexadecimal, and decimal calculations.
+- The default Windows Calculator has a "Programmer Mode" that can be extremely useful for assembly programming. Use it to perform quick binary, hexadecimal, and decimal calculations.
 
 ### CPU Registers
 
