@@ -8,10 +8,19 @@ A simple yet powerful calculator application written in x86-64 assembly for Wind
 2. [Features](#features)
 3. [Screenshots](#screenshots)
 4. [Environment Setup](#environment-setup)
-5. [Building the Application](#building-the-application)
-6. [Usage](#usage)
-7. [Tooling and Resources](#tooling-and-resources)
-8. [Acknowledgments](#acknowledgments)
+   - [Prerequisites](#prerequisites)
+   - [Clone the Repository](#clone-the-repository)
+   - [Setup Steps](#setup-steps)
+   - [Building the Application](#building-the-application)
+5. [Usage](#usage)
+   - [How to Run](#how-to-run)
+6. [Development](#development)
+   - [Windows x64 Assembly Guidelines](#windows-x64-assembly-guidelines)
+   - [NASM Assembly Quick Guide](#nasm-assembly-quick-guide)
+   - [Tools](#tools)
+   - [Debugging](#debugging)
+7. [Acknowledgments](#acknowledgments)
+8. [Support](#support)
 9. [License](#license)
 
 ## Project Overview
@@ -44,24 +53,24 @@ To build and run this project, you will need the following tools and environment
 2. **Visual Studio Build Tools**: [Download Visual Studio Build Tools](https://visualstudio.microsoft.com/it/downloads/?q=build+tools) to link the compiled object files into an executable.
 3. **Windows Environment**: The application is designed for Windows x64 systems.
 
-### Installation Instructions
+> **Tip**: You can install the required tools using [Chocolatey](https://chocolatey.org/install). Run the following command in an elevated PowerShell terminal:
 
-1. **Clone the Repository**:
+```bash
+choco install nasm visualstudio2022buildtools visualstudio2022-workload-vctools
+```
 
-   ```bash
-   git clone https://github.com/mtmarco87/calculator-asm.git
-   cd calculator-asm
-   ```
+### Clone the Repository
 
-2. **Install Required Tools**: It is recommended to install the required tools using [Chocolatey](https://chocolatey.org/install). Run the following command in an elevated PowerShell terminal:
+```bash
+git clone https://github.com/mtmarco87/calculator-asm.git
+cd calculator-asm
+```
 
-   ```bash
-   choco install nasm visualstudio2022buildtools visualstudio2022-workload-vctools
-   ```
+### Setup Steps
 
-3. **Add NASM to PATH**: Ensure the NASM binary folder is added to your `PATH` environment variable. This step is necessary for the `makefile` to locate the assembler.
+1. **Add NASM to PATH**: Ensure the NASM binary folder is added to your `PATH` environment variable. This step is necessary for the `makefile` to locate the assembler.
 
-4. **Ensure Build Environment Setup**: The build process automatically detects and configures the required Visual Studio build environment (`vcvarsall.bat`) using the `vswhere.exe` tool. If Visual Studio is installed, no manual configuration is needed.
+2. **Ensure Build Environment Setup**: The build process automatically detects and configures the required Visual Studio build environment (`vcvarsall.bat`) using the `vswhere.exe` tool. If Visual Studio is installed, no manual configuration is needed.
 
    If autodetection fails, ensure the following:
 
@@ -72,7 +81,7 @@ To build and run this project, you will need the following tools and environment
      ```
    - Alternatively, you can manually specify the `VS_VERSION` (e.g., `VS_VERSION=2017`, `VS_VERSION=2022`) or provide the full path to `vcvarsall.bat` using the `VCVARSALL_PATH` variable in the `make` command.
 
-## Building the Application
+### Building the Application
 
 The build process is automated using a `makefile` for simplicity. Run the following command to assemble and link the application:
 
@@ -80,7 +89,7 @@ The build process is automated using a `makefile` for simplicity. Run the follow
 make
 ```
 
-### Detailed Build Steps
+#### Detailed Build Steps
 
 **Note**: The steps below are provided for informational purposes only. You do not need to execute them manually if you are using the `make` command. The `makefile` automates these steps for you.
 
@@ -110,6 +119,8 @@ make
 
 ## Usage
 
+### How to Run
+
 1. Run the application:
    ```bash
    out\calculator.exe
@@ -119,17 +130,9 @@ make
    - Enter `q` to quit the application.
    - Enter an arithmetic expression (e.g., `5 + 3`) to calculate the result.
 
-## Tooling and Resources
+## Development
 
-### Debugging Tools
-
-- **[x64dbg](https://x64dbg.com/)**: A powerful debugger for Windows x86/x64 applications. It is highly recommended for debugging and reverse engineering assembly code.
-
-### Calculator
-
-- The default Windows Calculator has a "Programmer Mode" that can be extremely useful for assembly programming. Use it to perform quick binary, hexadecimal, and decimal calculations.
-
-### CPU Registers
+### Windows x64 Assembly Guidelines
 
 When working with assembly on Windows, keep the following in mind:
 
@@ -139,7 +142,7 @@ When working with assembly on Windows, keep the following in mind:
 - **Win64 Function Call Convention**: The first four parameters of a function are passed in the following registers:
   - **RCX**, **RDX**, **R8**, **R9**.
   - Additional parameters are passed on the stack.
-- **Stack Requirements (Win64 home space)**: Before making a function call, reserve 32 bytes of stack space (plus 16 bytes for alignment). Ensure this space is zeroed out for proper function execution.
+- **Stack Requirements (Win64 home space)**: Before making a function call, reserve 32 bytes of stack space plus 16 bytes for alignment. Ensure this space is zeroed out for proper function execution.
 
 **Note**: For more details on the Windows-specific behavior described above, you can refer to the [University of Alaska Fairbanks x86/x64 Reference](https://www.cs.uaf.edu/2017/fall/cs301/reference/x86_64.html).
 
@@ -171,6 +174,14 @@ When working with assembly on Windows, keep the following in mind:
 - **32 bytes (256-bit)**: `yword`, `DY`, `RESY`.
 - **64 bytes (512-bit)**: `zword`, `DZ`, `RESZ`.
 
+### Tools
+
+- **Windows Calculator**: The default Windows Calculator has a "Programmer Mode" that can be extremely useful for assembly programming. Use it to perform quick binary, hexadecimal, and decimal calculations.
+
+### Debugging
+
+- **[x64dbg](https://x64dbg.com/)**: A powerful debugger for Windows x86/x64 applications. It is highly recommended for debugging and reverse engineering assembly code.
+
 ## Acknowledgments
 
 Special thanks to the following resources and individuals for their guidance and inspiration:
@@ -183,6 +194,16 @@ Special thanks to the following resources and individuals for their guidance and
 - [mcandre](https://gist.github.com/mcandre)
 - [Hermann Krohn](https://towardsdatascience.com/hello-world-not-so-easy-in-assembly-23da6644ff0d)
 - [below](https://github.com/below)
+
+## Support
+
+If you find this project useful, consider supporting its development:
+
+- ⭐ Star the repository to show your appreciation.
+- 💬 Share feedback or suggestions by opening an issue.
+- ☕ [Buy me a coffee](https://buymeacoffee.com/mtmarco87) to support future updates and improvements.
+- 🔵 BTC Address: `bc1qzy6e99pkeq00rsx8jptx93jv56s9ak2lz32e2d`
+- 🟣 ETH Address: `0x38cf74ED056fF994342941372F8ffC5C45E6cF21`
 
 ## License
 
